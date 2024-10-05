@@ -9,15 +9,21 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// Create div
-const div = document.createElement("div");
+
 
 // Create button
 const button = document.createElement("button");
 button.innerHTML = "Click🔥";
+app.append(button);
 
-// Append the button to the div container
-div.append(button);
+// Create counter
+let count: number = 0;
+const text = document.createElement("h2");
+text.innerText = `Count: ${count}`;
+app.append(text);
 
-// Append the div container to the app
-app.append(div);
+// Increment count on click
+button.addEventListener("click", () => {
+    count++;
+    text.innerText = `Count: ${count}`;
+});
