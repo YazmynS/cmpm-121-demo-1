@@ -2,7 +2,7 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "The Game";
+const gameName = "Clicker";
 document.title = gameName;
 
 const header = document.createElement("h1");
@@ -21,9 +21,9 @@ Text.innerText = `Count: ${count}`;
 app.append(Text);
 
 //DisplayText Function
-const DisplayText = () =>{
-    Text.innerText = `Count: ${count}`;
-}
+const DisplayText = () => {
+  Text.innerText = `Count: ${count}`;
+};
 
 // Increment count on click
 button.addEventListener("click", () => {
@@ -31,9 +31,24 @@ button.addEventListener("click", () => {
   DisplayText();
 });
 
-//Increment count per second
-setInterval(() => {
-    count++;
-    DisplayText();
+//Increment count per frame rate
+let frameTime = 0;
+let wholeTime = 0;  //Increment count via whole nums
 
-}, 1000);
+requestAnimationFrame(function animate(time){
+  //Handle Base case
+  if (frameTime === 0) frameTime = time;
+  
+  //Calculate Time (!)
+  wholeTime += (time - frameTime) / 1000;
+  
+  //Increment count with whole numbers only
+  while (wholeTime >= 1){ 
+    count++; 
+    wholeTime -= 1;
+  }
+  //Update values
+  frameTime = time;
+  DisplayText();
+  requestAnimationFrame(animate);
+})
