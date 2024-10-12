@@ -10,15 +10,17 @@ header.innerHTML = gameName;
 app.append(header);
 
 // Create Click button
-const button = document.createElement("button");
-button.innerHTML = "Train";
+const button = document.createElement("img");
+button.src = "src/Ichigo.png";
+button.style.width = "150px"; 
+button.style.cursor = "pointer"; 
 app.append(button);
 
 // Create counter
 let count: number = 0;
 let growthRate: number = 0;
 const Text = document.createElement("h2");
-Text.innerText = `Count: ${count}`;
+Text.innerText = `Reiatsu: ${count}`;
 app.append(Text);
 
 // Create growth rate display
