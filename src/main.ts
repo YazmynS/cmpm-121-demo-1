@@ -82,14 +82,14 @@ const handleButtonClick = (
   button: HTMLButtonElement,
   requiredCount: number,
   growthIncrement: number,
-  clickCounter: { clicks: number }
+  clickCounter: { clicks: number },
 ) => {
   button.addEventListener("click", () => {
     if (count >= requiredCount) {
       count -= requiredCount; // Subtract required count
       growthRate += growthIncrement; // Increment growth rate
       clickCounter.clicks++; // Increment click count
-      button.innerHTML = `${button.innerHTML.split(':')[0]}: ${clickCounter.clicks}`; // Update button text
+      button.innerHTML = `${button.innerHTML.split(":")[0]}: ${clickCounter.clicks}`; // Update button text
       DisplayText();
       DisplayGrowthRate(); // Update growth rate display
       updateButtonStates();
