@@ -1,7 +1,22 @@
 import "./style.css";
 
-const app: HTMLDivElement = document.querySelector("#app")!;
+// Define the Item interface
+interface Item {
+  name: string;
+  cost: number;
+  rate: number;
+}
 
+// Define availableItems array
+const availableItems: Item[] = [
+  { name: "Rukia", cost: 10, rate: 0.1 },
+  { name: "Yoruichi", cost: 100, rate: 2 },
+  { name: "Kisuke", cost: 1000, rate: 50 },
+  { name: "Zangetsu", cost: 10000, rate: 100 },
+];
+
+// Set up the main elements in the app
+const app: HTMLDivElement = document.querySelector("#app")!;
 const gameName = "Soul Reaper";
 document.title = gameName;
 
@@ -9,28 +24,27 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// Create Click button
+// Create main click image button
 const button = document.createElement("img");
-button.src = "src/Ichigo.png";
-button.style.width = "150px"; 
-button.style.cursor = "pointer"; 
+button.src = "src/Ichigo.png"; // Ensure the image path is correct
+button.style.width = "150px";
+button.style.cursor = "pointer";
 app.append(button);
 
-// Create counter
+// Create counter and growth rate display
 let count: number = 0;
 let growthRate: number = 0;
 const Text = document.createElement("h2");
 Text.innerText = `Reiatsu: ${count}`;
 app.append(Text);
 
-// Create growth rate display
 const growthRateText = document.createElement("h2");
 growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
 app.append(growthRateText);
 
 // DisplayText Function
 const DisplayText = () => {
-  Text.innerText = `Count: ${count}`;
+  Text.innerText = `Reiatsu: ${count}`;
 };
 
 // DisplayGrowthRate Function
@@ -38,106 +52,64 @@ const DisplayGrowthRate = () => {
   growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
 };
 
-// Increment count on click
+// Increment count on click (on the image)
 button.addEventListener("click", () => {
   count++;
   DisplayText();
   updateButtonStates();
 });
 
-// Create a click counter for each button and initial prices
-const rukiaClicks = 0;
-const yoruichiClicks = 0;
-const kisukeClicks = 0;
-const zangetsuClicks = 0;
+// Store the click counts and price dynamically for each item
+const itemStates = availableItems.map(item => ({
+  clicks: 0, // Track how many times each item has been clicked
+  price: item.cost, // Set initial price for the item
+}));
 
-const rukiaPrice = 10;
-const yoruichiPrice = 100;
-const kisukePrice = 1000;
-const zangetsuPrice = 10000;
+// Dynamically create buttons for each item in the availableItems array
+const itemButtonContainer = document.createElement("div");
+app.append(itemButtonContainer);
 
-// Create Growth Rate button
-const RukiaButton = document.createElement("button");
-RukiaButton.innerHTML = `Train with Rukia: ${rukiaClicks} (Cost: ${rukiaPrice})`;
-RukiaButton.id = "rukia";
-RukiaButton.disabled = true;
-app.append(RukiaButton);
+availableItems.forEach((item, index) => {
+  const itemState = itemStates[index]; // Access the current item's state
 
-// Create Growth Rate button 2
-const YoruichiButton = document.createElement("button");
-YoruichiButton.innerHTML = `Train with Yoruichi: ${yoruichiClicks} (Cost: ${yoruichiPrice})`;
-YoruichiButton.id = "yoruichi";
-YoruichiButton.disabled = true;
-app.append(YoruichiButton);
+  // Create button for each item
+  const itemButton = document.createElement("button");
+  itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
+  itemButton.disabled = true; // Initially disabled
+  itemButtonContainer.append(itemButton);
 
-// Create Growth Rate button 3
-const Kisukebutton = document.createElement("button");
-Kisukebutton.innerHTML = `Train with Kisuke: ${kisukeClicks} (Cost: ${kisukePrice})`;
-Kisukebutton.id = "kisuke";
-Kisukebutton.disabled = true;
-app.append(Kisukebutton);
-
-// Create Growth Rate button 4
-const Zangetsubutton = document.createElement("button");
-Zangetsubutton.innerHTML = `Train with Zangetsu: ${zangetsuClicks} (Cost: ${zangetsuPrice})`;
-Zangetsubutton.id = "zangetsu";
-Zangetsubutton.disabled = true;
-app.append(Zangetsubutton);
-
-// Generic function to handle button click, growth management, and click counting with increasing cost
-const handleButtonClick = (
-  button: HTMLButtonElement,
-  clickCounter: { clicks: number },
-  growthIncrement: number,
-  price: { value: number },
-) => {
-  button.addEventListener("click", () => {
-    if (count >= price.value) {
-      count -= price.value; // Subtract the current price
-      growthRate += growthIncrement; // Increment growth rate
-      clickCounter.clicks++; // Increment click count
-      price.value = Math.ceil(price.value * 1.15); // Increase the price by 1.15
-      button.innerHTML = `${button.innerHTML.split(":")[0]}: ${clickCounter.clicks} (Cost: ${price.value})`; // Update button text
+  // Handle button click logic for each item
+  itemButton.addEventListener("click", () => {
+    if (count >= itemState.price) {
+      count -= itemState.price; // Subtract the current price
+      growthRate += item.rate; // Increment growth rate
+      itemState.clicks++; // Increment the click count
+      itemState.price = Math.ceil(itemState.price * 1.15); // Increase the price by 1.15
+      itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update button text
       DisplayText();
-      DisplayGrowthRate(); // Update growth rate display
-      updateButtonStates();
-      timedGrowth = true;
+      DisplayGrowthRate();
+      updateButtonStates(); // Check if buttons should be enabled or disabled
     }
+  });
+});
+
+// Enable or disable buttons based on the current count
+const updateButtonStates = () => {
+  availableItems.forEach((item, index) => {
+    const itemButton = itemButtonContainer.querySelectorAll("button")[index]; // Access each button dynamically
+    const itemState = itemStates[index]; // Access the current item's state
+    itemButton.disabled = count < itemState.price;
   });
 };
 
-// Call the generic function for each button with its specific values, click counter, and price
-handleButtonClick(RukiaButton, { clicks: rukiaClicks }, 0.1, {
-  value: rukiaPrice,
-});
-handleButtonClick(YoruichiButton, { clicks: yoruichiClicks }, 2.0, {
-  value: yoruichiPrice,
-});
-handleButtonClick(Kisukebutton, { clicks: kisukeClicks }, 50, {
-  value: kisukePrice,
-});
-handleButtonClick(Zangetsubutton, { clicks: zangetsuClicks }, 100, {
-  value: zangetsuPrice,
-});
-
-// Enable or disable buttons based on the count
-const updateButtonStates = () => {
-  RukiaButton.disabled = count < rukiaPrice;
-  YoruichiButton.disabled = count < yoruichiPrice;
-  Kisukebutton.disabled = count < kisukePrice;
-  Zangetsubutton.disabled = count < zangetsuPrice;
-};
-
-// Increment count per frame rate
+// Increment count based on frame rate and growth rate
 let frameTime = 0;
 let wholeTime = 0;
-let timedGrowth = false;
+const timedGrowth = false;
 
 requestAnimationFrame(function animate(time) {
-  // Handle base case
   if (frameTime === 0) frameTime = time;
 
-  // Calculate time
   if (timedGrowth) {
     wholeTime += (time - frameTime) / 1000;
 
@@ -150,7 +122,6 @@ requestAnimationFrame(function animate(time) {
     updateButtonStates(); // Ensure buttons are updated
   }
 
-  // Update values
   frameTime = time;
   requestAnimationFrame(animate);
 });
