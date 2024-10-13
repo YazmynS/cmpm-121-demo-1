@@ -69,34 +69,33 @@ const itemStates = availableItems.map(item => ({
 const itemButtonContainer = document.createElement("div");
 app.append(itemButtonContainer);
 
-//Handle each item
 availableItems.forEach((item, index) => {
   const itemState = itemStates[index]; // Access the current item's state
 
-  // Create purchasable items
+  // Create button for each item
   const itemButton = document.createElement("button");
-  itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
+  itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
   itemButton.disabled = true; // Initially disabled
   itemButtonContainer.append(itemButton);
 
-  //Logic for purchasable items
+  // Logic for clicking the button
   itemButton.addEventListener("click", () => {
     if (count >= itemState.price) {
-      count -= itemState.price; // Subtract price
+      count -= itemState.price; // Subtract price from Reiatsu
       growthRate += item.rate; // Increment growth rate
       itemState.clicks++; // Increment the click count
-      itemState.price = Math.ceil(itemState.price * 1.15); // Increase the price by 1.15 (Display whole numbers only)
-      itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update buttons
-      DisplayText();
-      DisplayGrowthRate();
-      updateButtonStates(); // Check if buttons should be enabled/disabled
+      itemState.price = itemState.price * 1.15; // Increase the price by 1.15
+      itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update button text
+      DisplayText(); // Update the Reiatsu display
+      DisplayGrowthRate(); // Update the growth rate display
+      updateButtonStates(); // Update button states based on current Reiatsu count
     }
   });
 });
 
 // Enable/disable buttons based on count
 const updateButtonStates = () => {
-  availableItems.forEach((item, index) => {
+  availableItems.forEach((_, index) => {
     const itemButton = itemButtonContainer.querySelectorAll("button")[index]; // Access each button
     const itemState = itemStates[index]; // Access current item's state
     itemButton.disabled = count < itemState.price;
@@ -106,7 +105,7 @@ const updateButtonStates = () => {
 // Increment count based on frame and growth rate
 let frameTime = 0;
 let wholeTime = 0;
-const timedGrowth = false;
+const timedGrowth = true;
 
 requestAnimationFrame(function animate(time) {
   if (frameTime === 0) frameTime = time;
