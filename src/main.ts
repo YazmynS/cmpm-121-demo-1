@@ -1,18 +1,19 @@
 import "./style.css";
 
-// Define the Item interface
+// Create Item interface
 interface Item {
   name: string;
+  description: string;
   cost: number;
   rate: number;
 }
 
-// Define availableItems array
 const availableItems: Item[] = [
-  { name: "Rukia", cost: 10, rate: 0.1 },
-  { name: "Yoruichi", cost: 100, rate: 2 },
-  { name: "Kisuke", cost: 1000, rate: 50 },
-  { name: "Zangetsu", cost: 10000, rate: 100 },
+  { name: "Rukia", description: "Ichigo does a training session with Rukia", cost: 10, rate: 0.1 },
+  { name: "Yoruichi", description: "Ichigo does a training session with Yoruichi", cost: 100, rate: 2 },
+  { name: "Kisuke", description: "Ichigo does a training session with Kisuke",cost: 1000, rate: 50 },
+  { name: "Zangetsu", description: "Ichigo does a training session with Zangetsu", cost: 10000, rate: 100 },
+  {name: "White", description: "Ichigo does a training session with White", cost: 1000000, rate: 1000},
 ];
 
 // Set up the main elements in the app
@@ -26,83 +27,83 @@ app.append(header);
 
 // Create main click image button
 const button = document.createElement("img");
-button.src = "src/Ichigo.png"; // Ensure the image path is correct
+button.src = "src/Ichigo.png";
 button.style.width = "150px";
 button.style.cursor = "pointer";
 app.append(button);
 
-// Create counter and growth rate display
+// Create counter display
 let count: number = 0;
 let growthRate: number = 0;
 const Text = document.createElement("h2");
 Text.innerText = `Reiatsu: ${count}`;
 app.append(Text);
 
-const growthRateText = document.createElement("h2");
-growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
-app.append(growthRateText);
-
-// DisplayText Function
 const DisplayText = () => {
   Text.innerText = `Reiatsu: ${count}`;
 };
 
-// DisplayGrowthRate Function
+//Create grwoth rate display
+const growthRateText = document.createElement("h2");
+growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
+app.append(growthRateText);
+
 const DisplayGrowthRate = () => {
   growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
 };
 
-// Increment count on click (on the image)
+// Click and increment count
 button.addEventListener("click", () => {
   count++;
   DisplayText();
   updateButtonStates();
 });
 
-// Store the click counts and price dynamically for each item
+// Track clicks and price for display
 const itemStates = availableItems.map(item => ({
-  clicks: 0, // Track how many times each item has been clicked
-  price: item.cost, // Set initial price for the item
+  clicks: 0, 
+  price: item.cost,
 }));
 
-// Dynamically create buttons for each item in the availableItems array
+// Create buttons for each item
 const itemButtonContainer = document.createElement("div");
 app.append(itemButtonContainer);
 
+//Handle each item
 availableItems.forEach((item, index) => {
   const itemState = itemStates[index]; // Access the current item's state
 
-  // Create button for each item
+  // Create purchasable items
   const itemButton = document.createElement("button");
   itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
   itemButton.disabled = true; // Initially disabled
   itemButtonContainer.append(itemButton);
 
-  // Handle button click logic for each item
+  //Logic for purchasable items
   itemButton.addEventListener("click", () => {
     if (count >= itemState.price) {
-      count -= itemState.price; // Subtract the current price
+      count -= itemState.price; // Subtract price
       growthRate += item.rate; // Increment growth rate
       itemState.clicks++; // Increment the click count
-      itemState.price = Math.ceil(itemState.price * 1.15); // Increase the price by 1.15
-      itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update button text
+      itemState.price = Math.ceil(itemState.price * 1.15); // Increase the price by 1.15 (Display whole numbers only)
+      itemButton.innerHTML = `Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update buttons
       DisplayText();
       DisplayGrowthRate();
-      updateButtonStates(); // Check if buttons should be enabled or disabled
+      updateButtonStates(); // Check if buttons should be enabled/disabled
     }
   });
 });
 
-// Enable or disable buttons based on the current count
+// Enable/disable buttons based on count
 const updateButtonStates = () => {
   availableItems.forEach((item, index) => {
-    const itemButton = itemButtonContainer.querySelectorAll("button")[index]; // Access each button dynamically
-    const itemState = itemStates[index]; // Access the current item's state
+    const itemButton = itemButtonContainer.querySelectorAll("button")[index]; // Access each button
+    const itemState = itemStates[index]; // Access current item's state
     itemButton.disabled = count < itemState.price;
   });
 };
 
-// Increment count based on frame rate and growth rate
+// Increment count based on frame and growth rate
 let frameTime = 0;
 let wholeTime = 0;
 const timedGrowth = false;
@@ -118,8 +119,9 @@ requestAnimationFrame(function animate(time) {
       count += growthRate;
       wholeTime -= 1;
     }
+    
     DisplayText();
-    updateButtonStates(); // Ensure buttons are updated
+    updateButtonStates(); 
   }
 
   frameTime = time;
