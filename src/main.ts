@@ -11,9 +11,9 @@ interface Item {
 const availableItems: Item[] = [
   { name: "Rukia", description: "Ichigo does a training session with Rukia", cost: 10, rate: 0.1 },
   { name: "Yoruichi", description: "Ichigo does a training session with Yoruichi", cost: 100, rate: 2 },
-  { name: "Kisuke", description: "Ichigo does a training session with Kisuke",cost: 1000, rate: 50 },
+  { name: "Kisuke", description: "Ichigo does a training session with Kisuke", cost: 1000, rate: 50 },
   { name: "Zangetsu", description: "Ichigo does a training session with Zangetsu", cost: 10000, rate: 100 },
-  {name: "White", description: "Ichigo does a training session with White", cost: 1000000, rate: 1000},
+  { name: "White", description: "Ichigo does a training session with White", cost: 1000000, rate: 1000 },
 ];
 
 // Set up the main elements in the app
@@ -39,29 +39,26 @@ const Text = document.createElement("h2");
 Text.innerText = `Reiatsu: ${count}`;
 app.append(Text);
 
-const DisplayText = () => {
-  Text.innerText = `Reiatsu: ${count}`;
-};
-
-//Create grwoth rate display
 const growthRateText = document.createElement("h2");
 growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
 app.append(growthRateText);
 
-const DisplayGrowthRate = () => {
+// Combined function to update both displays
+const updateDisplay = () => {
+  Text.innerText = `Reiatsu: ${count}`;
   growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
 };
 
 // Click and increment count
 button.addEventListener("click", () => {
   count++;
-  DisplayText();
+  updateDisplay();
   updateButtonStates();
 });
 
 // Track clicks and price for display
 const itemStates = availableItems.map(item => ({
-  clicks: 0, 
+  clicks: 0,
   price: item.cost,
 }));
 
@@ -86,8 +83,7 @@ availableItems.forEach((item, index) => {
       itemState.clicks++; // Increment the click count
       itemState.price = itemState.price * 1.15; // Increase the price by 1.15
       itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update button text
-      DisplayText(); // Update the Reiatsu display
-      DisplayGrowthRate(); // Update the growth rate display
+      updateDisplay(); // Update displays
       updateButtonStates(); // Update button states based on current Reiatsu count
     }
   });
@@ -118,9 +114,9 @@ requestAnimationFrame(function animate(time) {
       count += growthRate;
       wholeTime -= 1;
     }
-    
-    DisplayText();
-    updateButtonStates(); 
+
+    updateDisplay(); // Update displays
+    updateButtonStates();
   }
 
   frameTime = time;
