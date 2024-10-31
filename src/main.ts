@@ -60,9 +60,9 @@ app.append(button);
 // Create counter display
 let count: number = 0;
 let growthRate: number = 0;
-const Text = document.createElement("h2");
-Text.innerText = `Reiatsu: ${count}`;
-app.append(Text);
+const reiatsuText = document.createElement("h2");
+reiatsuText.innerText = `Reiatsu: ${count}`;
+app.append(reiatsuText);
 
 const growthRateText = document.createElement("h2");
 growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
@@ -70,7 +70,7 @@ app.append(growthRateText);
 
 // Combined function to update both displays
 const updateDisplay = () => {
-  Text.innerText = `Reiatsu: ${count}`;
+  reiatsuText.innerText = `Reiatsu: ${count}`;
   growthRateText.innerText = `The current growth rate: ${growthRate.toFixed(1)} reiatsu/sec`;
 };
 
@@ -97,7 +97,7 @@ availableItems.forEach((item, index) => {
   // Create button for each item
   const itemButton = document.createElement("button");
   const priceMultiplier = 1.15;
-  
+
   itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
   itemButton.disabled = true; // Initially disabled
   itemButtonContainer.append(itemButton);
