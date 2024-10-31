@@ -71,6 +71,7 @@ availableItems.forEach((item, index) => {
 
   // Create button for each item
   const itemButton = document.createElement("button");
+  const priceMultiplier = 1.15;
   itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
   itemButton.disabled = true; // Initially disabled
   itemButtonContainer.append(itemButton);
@@ -81,7 +82,7 @@ availableItems.forEach((item, index) => {
       count -= itemState.price; // Subtract price from Reiatsu
       growthRate += item.rate; // Increment growth rate
       itemState.clicks++; // Increment the click count
-      itemState.price = itemState.price * 1.15; // Increase the price by 1.15
+      itemState.price = itemState.price * priceMultiplier; // Increase the price by 1.15
       itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`; // Update button text
       updateDisplay(); // Update displays
       updateButtonStates(); // Update button states based on current Reiatsu count
