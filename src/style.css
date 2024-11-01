@@ -106,8 +106,6 @@ button:focus-visible {
   background-color: #910e0e; /* Darker gray on hover */
 }
 
-
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

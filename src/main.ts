@@ -2,13 +2,12 @@ import "./style.css";
 
 // Create Item interface
 interface Item {
-  id: string;  
+  id: string;
   name: string;
   description: string;
   cost: number;
   rate: number;
 }
-
 
 const availableItems: Item[] = [
   {
@@ -47,7 +46,6 @@ const availableItems: Item[] = [
     rate: 1000,
   },
 ];
-
 
 // Set up the main elements in the app
 const app: HTMLDivElement = document.querySelector("#app")!;
