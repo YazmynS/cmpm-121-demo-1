@@ -2,44 +2,52 @@ import "./style.css";
 
 // Create Item interface
 interface Item {
+  id: string;  
   name: string;
   description: string;
   cost: number;
   rate: number;
 }
 
+
 const availableItems: Item[] = [
   {
+    id: "rukiaButton",
     name: "Rukia",
     description: "Ichigo does a training session with Rukia",
     cost: 10,
     rate: 0.1,
   },
   {
+    id: "yoruichiButton",
     name: "Yoruichi",
     description: "Ichigo does a training session with Yoruichi",
     cost: 100,
     rate: 2,
   },
   {
+    id: "kisukeButton",
     name: "Kisuke",
     description: "Ichigo does a training session with Kisuke",
     cost: 1000,
     rate: 50,
   },
   {
+    id: "zangetsuButton",
     name: "Zangetsu",
     description: "Ichigo does a training session with Zangetsu",
     cost: 10000,
     rate: 100,
   },
   {
+    id: "whiteButton",
     name: "White",
     description: "Ichigo does a training session with White",
     cost: 1000000,
     rate: 1000,
   },
 ];
+
 
 // Set up the main elements in the app
 const app: HTMLDivElement = document.querySelector("#app")!;
@@ -97,6 +105,8 @@ availableItems.forEach((item, index) => {
   // Create button for each item
   const itemButton = document.createElement("button");
   const priceMultiplier = 1.15;
+
+  itemButton.id = item.id;
   itemButton.innerHTML = `${item.description} - Train with ${item.name}: ${itemState.clicks} (Cost: ${itemState.price})`;
   itemButton.disabled = true; // Initially disabled
   itemButtonContainer.append(itemButton);
