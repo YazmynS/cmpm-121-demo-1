@@ -9,11 +9,36 @@ interface Item {
 }
 
 const availableItems: Item[] = [
-  { name: "Rukia", description: "Ichigo does a training session with Rukia", cost: 10, rate: 0.1 },
-  { name: "Yoruichi", description: "Ichigo does a training session with Yoruichi", cost: 100, rate: 2 },
-  { name: "Kisuke", description: "Ichigo does a training session with Kisuke", cost: 1000, rate: 50 },
-  { name: "Zangetsu", description: "Ichigo does a training session with Zangetsu", cost: 10000, rate: 100 },
-  { name: "White", description: "Ichigo does a training session with White", cost: 1000000, rate: 1000 },
+  {
+    name: "Rukia",
+    description: "Ichigo does a training session with Rukia",
+    cost: 10,
+    rate: 0.1,
+  },
+  {
+    name: "Yoruichi",
+    description: "Ichigo does a training session with Yoruichi",
+    cost: 100,
+    rate: 2,
+  },
+  {
+    name: "Kisuke",
+    description: "Ichigo does a training session with Kisuke",
+    cost: 1000,
+    rate: 50,
+  },
+  {
+    name: "Zangetsu",
+    description: "Ichigo does a training session with Zangetsu",
+    cost: 10000,
+    rate: 100,
+  },
+  {
+    name: "White",
+    description: "Ichigo does a training session with White",
+    cost: 1000000,
+    rate: 1000,
+  },
 ];
 
 // Set up the main elements in the app
@@ -57,7 +82,7 @@ button.addEventListener("click", () => {
 });
 
 // Track clicks and price for display
-const itemStates = availableItems.map(item => ({
+const itemStates = availableItems.map((item) => ({
   clicks: 0,
   price: item.cost,
 }));
